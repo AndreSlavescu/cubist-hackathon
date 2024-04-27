@@ -6,6 +6,8 @@ setup(
     packages=find_packages(),
     install_requires=[
         'polars',
+        'httpx',
+        'csp',
     ],
     python_requires='>=3.10',
     entry_points={

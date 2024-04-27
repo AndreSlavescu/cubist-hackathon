@@ -7,6 +7,7 @@ import csp
 from csp import ts
 from datetime import timedelta, datetime
 from pipeline.pipeline import DatasetLoader
+from rebalancing_algo.graph import Graph
 import polars as pl
 
 
@@ -81,16 +82,38 @@ def poll_data(interval: timedelta) -> ts[pl.DataFrame]:
 
         csp.schedule_alarm(a_poll, interval, True)
         return status
+
 @csp.node
 def push_data_to_perspective_table(data: ts[pl.DataFrame], table: PerspectiveTable):
     if csp.ticked(data):
         test = data.to_pandas()
         table.update(test)
+        
+@csp.node
+def process_data(df: ts[pl.DataFrame]) -> ts[pl.DataFrame]:
+    if csp.ticked(df):
+        if isinstance(df, pl.DataFrame):
+            graph = Graph(top_k=3)  
+            graph._fill_nodes(df)  
+            graph.set_top_k_distances()
+            graph.rebalance_stations(25, 45)
 
-@csp.graph
-def main_graph(table: PerspectiveTable, interval: timedelta = timedelta(seconds=60)):
+            modified_df = df.clone()
+            count = 0
+            for station_id, (num_bikes, _, _, _) in graph.nodes.items():
+                if count == 5:
+                    break
+                modified_df = modified_df.with_columns(pl.when(pl.col("station_id") == station_id).then(num_bikes).otherwise(pl.col("capacity")).alias("capacity"))
+                count += 1
+            return modified_df
+
+@csp.graph        
+def main_graph(table: PerspectiveTable, interval: timedelta = timedelta(seconds=10)):
     data = poll_data(interval)
+    graph = process_data(data)
     push_data_to_perspective_table(data, table)
+    csp.print("data", data)
+    csp.print("graph", graph)
 
 def run_app(manager: PerspectiveManager):
     """Connect to csp to perspective and load data
@@ -135,6 +158,8 @@ def main():
     run_app(perspective_manager)
     # logging.critical("Listening on http://localhost:8080")
     uvicorn.run(app, host="0.0.0.0", port=8080)
+
+
 
 if __name__ == '__main__':
     main()
