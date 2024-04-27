@@ -1,9 +1,18 @@
 import polars as pl
+import httpx
+
 from typing import List, Optional
+from functools import lru_cache
 import logging
 
+CITIBIKE_STATION_INFORMATION = (
+    "https://gbfs.lyft.com/gbfs/2.3/bkn/en/station_information.json"
+)
+CITIBIKE_STATION_STATUS = "https://gbfs.lyft.com/gbfs/2.3/bkn/en/station_status.json"
+CITIBIKE_VEHICLE_TYPE = "https://gbfs.lyft.com/gbfs/2.3/bkn/en/vehicle_types.json"
+
 class DatasetLoader:
-    def __init__(self, file_path: str):
+    def __init__(self, file_path: str = ""):
         """
         Initialize the DatasetLoader with a path to the dataset.
 
@@ -22,6 +31,16 @@ class DatasetLoader:
         """
         try:
             self.stream = pl.scan_csv(self.file_path, batch_size=batch_size)
+            self.logger.info("Data loaded successfully.")
+        except Exception as e:
+            self.logger.error(f"Failed to load data: {e}")
+
+    def load_data_json(self, data: str):
+        """
+        Load data from the file_path using Polars.
+        """
+        try:
+            self.stream = pl.read_json(data)
             self.logger.info("Data loaded successfully.")
         except Exception as e:
             self.logger.error(f"Failed to load data: {e}")
@@ -73,3 +92,22 @@ class DatasetLoader:
             return None
         
         return self.dataframe.describe()
+    
+    @lru_cache
+    def get_stations(self):
+        dat = httpx.get(CITIBIKE_STATION_INFORMATION).json()
+        return pl.DataFrame(dat['data']['stations'], schema=["station_id", "capacity", "name", "short_name", "region_id", "lon", "lat"])
+
+
+    @lru_cache
+    def get_vehicle_types(self):
+        dat = httpx.get(CITIBIKE_VEHICLE_TYPE).json()
+        return pl.DataFrame(dat['data']['vehicle_types'], schema=["vehicle_type_id", "form_factor", "propulsion_type", "max_range_meters"])
+
+
+    def get_station_status(self):
+        records = httpx.get(CITIBIKE_STATION_STATUS).json()["data"]["stations"]
+        status = pl.DataFrame(records, schema=["station_id", "num_bikes_available", "num_bikes_disabled", "num_docks_available", "num_docks_disabled", "num_ebikes_available", "is_installed", "is_renting", "is_returning", "last_reported"])
+
+        stations = self.get_stations()
+        return stations.join(status, on="station_id", how="inner")
