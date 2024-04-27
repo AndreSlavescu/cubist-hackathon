@@ -1,0 +1,21 @@
+  header_text {
+    translation {
+      text: "Northbound B1 and eastbound B4 and B36 buses will bypass the Ocean Pkwy stop between Shore Rd and Avenue Z due to construction at that location."
+      language: "en"
+    }
+    translation {
+      text: "<p>Northbound <b>B1</b> and eastbound <b>B4</b> and <b>B36</b> buses will bypass the Ocean Pkwy stop between Shore Rd and Avenue Z due to construction at that location.</p>"
+      language: "en-html"
+    }
+  }
+  description_text {
+    translation {
+      text: "Customers may board/exit in front of Coney Island Hospital instead.\n\nNote: Bus arrival information may not be available/accurate while buses are detoured."
+      language: "en"
+    }
+    translation {
+      text: "<p>Customers may board/exit in front of Coney Island Hospital instead.</p><p></p><p>Note: Bus arrival information may not be available/accurate while buses are detoured.</p>"
+      language: "en-html"
+    }
+  }
+}
