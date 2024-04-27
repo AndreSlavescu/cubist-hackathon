@@ -6,6 +6,8 @@ For more details on our system's design, see our [design doc](docs/system_design
 
 For more details on our mission statement, see our [mission statement doc](docs/mission_statement.md).
 
+For more details on how to contribute to our project, see our [contributing guide](docs/CONTRIBUTING..md).
+
 ## Build 
 
 ```bash
