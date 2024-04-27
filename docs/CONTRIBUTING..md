@@ -6,6 +6,11 @@ We welcome contributions from everyone. Here are some guidelines to help you get
 
 1. **Fork the repository**: Click the 'Fork' button at the top right of this page to create your own copy of this repository.
 2. **Clone your fork**: Find the 'Clone' option in your forked repository and copy the URL. Then run `git clone <URL>` in your terminal to get a local copy of the code.
+3. **Run Pre-commit Install for Pre-commit hooks**: 
+```bash
+pre-commit install
+pre-commit run --all-files
+```
 
 ## Making Changes
 
