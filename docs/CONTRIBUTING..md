@@ -6,12 +6,13 @@ We welcome contributions from everyone. Here are some guidelines to help you get
 
 1. **Fork the repository**: Click the 'Fork' button at the top right of this page to create your own copy of this repository.
 2. **Clone your fork**: Find the 'Clone' option in your forked repository and copy the URL. Then run `git clone <URL>` in your terminal to get a local copy of the code.
+3. **Set up pre-commit hooks**: Run `pre-commit install` in your local repository to set up pre-commit hooks that will automatically check your changes for issues before you commit them.
 
 ## Making Changes
 
 1. **Create a branch**: Before making your changes, switch to a new branch with `git checkout -b <branch-name>`.
 2. **Make your changes**: Update or add files as necessary. Please keep your code clean and well-commented.
-3. **Test your changes**: Make sure your changes do not break the project. Run any existing tests, and consider writing new ones if you're adding functionality.
+3. **Run pre-commit on all files**: Before committing your changes, ensure all files are properly formatted and follow the project's coding standards by running `pre-commit run --all-files`.
 4. **Commit your changes**: Once you're happy with your changes, add them to the branch with `git add .` and commit them with `git commit -m 'Add some feature'`.
 
 ## Submitting a Pull Request
