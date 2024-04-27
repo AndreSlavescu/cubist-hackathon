@@ -99,12 +99,8 @@ def process_data(df: ts[pl.DataFrame]) -> ts[pl.DataFrame]:
             graph.rebalance_stations(25, 45)
 
             modified_df = df.clone()
-            count = 0
             for station_id, (num_bikes, _, _, _) in graph.nodes.items():
-                if count == 5:
-                    break
                 modified_df = modified_df.with_columns(pl.when(pl.col("station_id") == station_id).then(num_bikes).otherwise(pl.col("capacity")).alias("capacity"))
-                count += 1
             return modified_df
 
 @csp.graph        
