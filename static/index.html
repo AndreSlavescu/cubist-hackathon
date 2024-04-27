@@ -42,7 +42,7 @@
   </head>
   <body>
     <perspective-viewer id="map" theme="Pro Dark"></perspective-viewer>
-    <perspective-viewer id="grid" theme="Pro Dark"></perspective-viewer>
+    <perspective-viewer id="mod_map" theme="Pro Dark"></perspective-viewer>
   </body>
   <script type="module">
     import perspective from "https://cdn.jsdelivr.net/npm/@finos/perspective/dist/cdn/perspective.js";
@@ -53,8 +53,9 @@
       const websocket = perspective.websocket("ws://localhost:8080/websocket");
       const worker = perspective.worker();
       const table = websocket.open_table("data");
+      const mod_table = websocket.open_table("mod_data");
       document.getElementById("map").load(table);
-      document.getElementById("grid").load(table);
+      document.getElementById("mod_map").load(mod_table);
 
     //   const layout_json = await fetch("layout.json");
     //   const layout = await layout_json.json();
@@ -74,19 +75,18 @@
         ]
     
       });
-      document.getElementById("grid").restore({
-        plugin: "Datagrid",
+      document.getElementById("mod_map").restore({
+        plugin: "Map Scatter",
         theme: "Pro Dark",
-        title: "Grid",
+        title: "Map",
         columns: [
-          "name",
-          "last_reported",
-          "capacity",
-          "is_renting",
-          "is_returning",
+          "lon",
+          "lat",
           "num_bikes_available",
-        ],
-        sort: [["last_reported", "desc"]],
+          "capacity",
+          null,
+          null,
+        ]
       });
     });
   </script>

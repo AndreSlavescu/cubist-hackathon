@@ -108,12 +108,14 @@ def process_data(df: ts[pl.DataFrame]) -> ts[pl.DataFrame]:
             return modified_df
 
 @csp.graph        
-def main_graph(table: PerspectiveTable, interval: timedelta = timedelta(seconds=10)):
+def main_graph(table: PerspectiveTable, mod_table: PerspectiveTable, interval: timedelta = timedelta(seconds=10)):
     data = poll_data(interval)
-    graph = process_data(data)
+    modified_df = process_data(data)
+    # data.vstack(modified_df)
     push_data_to_perspective_table(data, table)
+    push_data_to_perspective_table(modified_df, mod_table)
     csp.print("data", data)
-    csp.print("graph", graph)
+    csp.print("graph", modified_df)
 
 def run_app(manager: PerspectiveManager):
     """Connect to csp to perspective and load data
@@ -142,11 +144,33 @@ def run_app(manager: PerspectiveManager):
         index="station_id",
     )
 
+    table2 = PerspectiveTable(
+        {
+            "station_id": str,
+            "capacity": int,
+            "name": str,
+            'short_name': str,
+            "region_id": str, 
+            "lon": float,
+            "lat": float,
+            "num_bikes_available": int,
+            "num_bikes_disabled": int,
+            "num_docks_disabled": int,
+            "num_ebikes_available": int,
+            "is_installed": bool,
+            "is_renting": bool,
+            "is_returning": bool,
+            "last_reported": datetime,
+        },
+        index="station_id",
+    )
+
     # host these tables
     manager.host_table("data", table)
+    manager.host_table("mod_data", table2)
 
     
-    return csp.run_on_thread(main_graph, table, timedelta(seconds=60), realtime=True)
+    return csp.run_on_thread(main_graph, table, table2, timedelta(seconds=60), realtime=True)
 
 
 def main():
