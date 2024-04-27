@@ -42,8 +42,8 @@ Our project addresses the lack of `equitable public transportation` in these pre
 On June 30, 2024, to alleviate traffic in NYC, most passenger vehicles will be charged $15/day for entering the Manhattan Central Business District `(CBD) congestion zone` below 60th Street and raising Taxi/Uber/Lyft fares ~$1.25-2.50+/ride. Congestion pricing is expected to lower the number of vehicles by 17 percent [November 2023 report by the MTA](https://new.mta.info/document/127761) `generate $15B` for capital projects that increase sustainability and `improve public transit`, as well as limit congestion and air pollution.
 
 <p align="center">
-  <img src="citi.png" alt="Figure 1" style="height: 200px; width: auto;"/>
-  <img src="rnp.png" alt="Figure 2" style="height: 200px; width: auto;"/>
+  <img src="fig1.png" alt="Figure 1" style="height: 200px; width: auto;"/>
+  <img src="fig2.png" alt="Figure 2" style="height: 200px; width: auto;"/>
 </p>
 
 This figure on the left showcases that roughly 4% of daily commuters walk, bike, or take a taxi. In anticipated demand for Citibikes, our algorithm provides an `adaptive solution` to `distribute bikes` throughout these new hot zones. We will also be targeting maintaining availability for the 12,000 commuters that have low proximity to public transportation. 
