@@ -163,10 +163,10 @@ def mta_alerts(table: PerspectiveTable, timedelta: timedelta = timedelta(seconds
 def process_data(df: ts[pl.DataFrame]) -> ts[pl.DataFrame]:
     if csp.ticked(df):
         if isinstance(df, pl.DataFrame):
-            graph = Graph(top_k=3)  
+            graph = Graph(top_k=8)  
             graph._fill_nodes(df)  
             graph.set_top_k_distances()
-            graph.rebalance_stations(25, 30)
+            graph.rebalance_stations(25, 40)
 
             modified_df = df.clone()
 
