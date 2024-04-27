@@ -43,7 +43,8 @@
   <body>
     <perspective-viewer id="map" theme="Pro Dark"></perspective-viewer>
     <perspective-viewer id="mod_map" theme="Pro Dark"></perspective-viewer>
-    <!-- <perspective-viewer id="alerts_map" theme="Pro Dark"></perspective-viewer> -->
+    <perspective-viewer id="stations_before" theme="Pro Dark"></perspective-viewer>
+    <perspective-viewer id="stations_after" theme="Pro Dark"></perspective-viewer>
   </body>
   <script type="module">
     import perspective from "https://cdn.jsdelivr.net/npm/@finos/perspective/dist/cdn/perspective.js";
@@ -58,6 +59,29 @@
       const alerts_table = websocket.open_table("alerts_table");
       document.getElementById("map").load(table);
       document.getElementById("mod_map").load(mod_table);
+      document.getElementById("stations_before").load(table);
+      document.getElementById("stations_before").restore({
+        plugin: "Datagrid",
+        theme: "Pro Light",
+        title: "Grid",
+        columns: [
+          "name",
+          "num_bikes_available",
+        ],
+        sort: [["num_bikes_available", "desc"]],
+      });
+
+      document.getElementById("stations_after").load(mod_table);
+      document.getElementById("stations_after").restore({
+        plugin: "Datagrid",
+        theme: "Pro Light",
+        title: "Grid",
+        columns: [
+          "name",
+          "num_bikes_available",
+        ],
+        sort: [["num_bikes_available", "desc"]],
+      });
     //   document.getElementById("alerts_map").load(alerts_table);
     //   document.getElementById("alerts_map").restore({
     //     plugin: "Datagrid",
