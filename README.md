@@ -20,3 +20,10 @@ chmod +x build.sh
 ```bash
 pipenv run python -m unittest discover -s tests
 ```
+
+## Run Service
+
+```bash
+pipenv run python main.py
+```
+After starting the service, open [local host](http://localhost:8000) to access the web interface.
