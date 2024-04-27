@@ -14,5 +14,5 @@ chmod +x build.sh
 ## Run Tests
 
 ```bash
-pipenv run python -m unittest tests/test_pipeline.py
+pipenv run python -m unittest discover -s tests
 ```

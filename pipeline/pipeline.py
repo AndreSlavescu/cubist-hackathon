@@ -22,7 +22,7 @@ class DatasetLoader:
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
         self.file_path = file_path
-        self.dataframe = None
+        self.dataframe = pl.DataFrame()
         self.stream = None
 
     def load_data(self, batch_size: int = 1024):
@@ -30,7 +30,8 @@ class DatasetLoader:
         Load data from the file_path using Polars.
         """
         try:
-            self.stream = pl.scan_csv(self.file_path, batch_size=batch_size)
+            self.logger.info(f"File path: {self.file_path}")
+            self.stream = pl.scan_csv(self.file_path, n_rows=batch_size)
             self.logger.info("Data loaded successfully.")
         except Exception as e:
             self.logger.error(f"Failed to load data: {e}")
@@ -55,6 +56,8 @@ class DatasetLoader:
                 self.logger.info("Data loaded successfully.")
             except Exception as e:
                 self.logger.error(f"Failed to load data: {e}")
+        else:
+            self.logger.error("Data stream is None, cannot finalize data.")
 
     def check_fields(self, required_fields: List[str]) -> bool:
         """

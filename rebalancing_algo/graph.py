@@ -27,10 +27,10 @@ class Graph:
         except:
             raise Exception("Invalid Payload Format") 
 
-    def get_top_k_neighbors(self, target_node: tuple(float, float, str)) -> list:
+    def get_top_k_neighbors(self, target_node: tuple[float, float, str]) -> list:
         """
         Args:
-            target_node: tuple(float, float), target node to fetch top-k neighbors for
+            target_node: tuple[float, float, str], target node to fetch top-k neighbors for
         Returns:
             top-k neighbors for a given input node
         """
@@ -59,13 +59,13 @@ class Graph:
                 heappushpop(distances_heap, (-distance, new_id))
         return sorted((-dist, id) for dist, id in distances_heap)
             
-    def transfer_objects(self, start_node: tuple(float, float, str), target_node: tuple(float, float, str)) -> None:
+    def transfer_objects(self, start_node: tuple[float, float, str], target_node: tuple[float, float, str]) -> None:
         """
         Transfer an object from the start node to the target node, decrementing the count at the start node and incrementing at the target node.
 
         Args:
-            start_node: tuple(float, float, str), the starting node as a tuple containing latitude, longitude, and identifier
-            target_node: tuple(float, float, str), the target node as a tuple containing latitude, longitude, and identifier
+            start_node: tuple[float, float, str], the starting node as a tuple containing latitude, longitude, and identifier
+            target_node: tuple[float, float, str], the target node as a tuple containing latitude, longitude, and identifier
         """
         self.nodes[start_node] = max(self.nodes[start_node] - 1, 0)
         self.nodes[target_node] += 1

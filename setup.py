@@ -10,7 +10,9 @@ setup(
     python_requires='>=3.10',
     entry_points={
         'console_scripts': [
+            'cubist-hackathon=main:main',
             'cubist-hackathon=tests.test_pipeline:main',
+            'cubist-hackathon=tests.test_graph:main',
         ],
     },
 )

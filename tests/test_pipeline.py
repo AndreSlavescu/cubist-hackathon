@@ -6,14 +6,14 @@ from pipeline.pipeline import DatasetLoader
 
 class TestDatasetLoader(unittest.TestCase):
     def setUp(self):
-        self.loader = DatasetLoader("Iris.csv")
+        self.loader = DatasetLoader("test_data/Iris.csv")
 
     @patch("polars.scan_csv")
     def test_load_data_success(self, mock_scan_csv):
         mock_stream = MagicMock()
         mock_scan_csv.return_value = mock_stream
         self.loader.load_data(batch_size=500)
-        mock_scan_csv.assert_called_with("Iris.csv", batch_size=500)
+        mock_scan_csv.assert_called_with("test_data/Iris.csv", n_rows=500)
         self.assertIsNotNone(self.loader.stream)
         self.assertIs(self.loader.stream, mock_stream)
 
