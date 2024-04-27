@@ -9,3 +9,7 @@ fastapi = "*"
 requests = "*"
 perspective-python = "*"
 uvicorn = {version="*", extras=["standard"]}
+gtfs-realtime-bindings = "*"
+geopy = "*"
+openai = "*"
+python-dotenv = "*"

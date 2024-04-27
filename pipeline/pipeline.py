@@ -5,11 +5,18 @@ from typing import List, Optional
 from functools import lru_cache
 import logging
 
+import requests
+
+from google.transit import gtfs_realtime_pb2
+
+
 CITIBIKE_STATION_INFORMATION = (
     "https://gbfs.lyft.com/gbfs/2.3/bkn/en/station_information.json"
 )
 CITIBIKE_STATION_STATUS = "https://gbfs.lyft.com/gbfs/2.3/bkn/en/station_status.json"
 CITIBIKE_VEHICLE_TYPE = "https://gbfs.lyft.com/gbfs/2.3/bkn/en/vehicle_types.json"
+
+MTA_ALERTS = 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/camsys%2Fall-alerts'
 
 class DatasetLoader:
     def __init__(self, file_path: str = ""):
@@ -106,6 +113,7 @@ class DatasetLoader:
     def get_vehicle_types(self):
         dat = httpx.get(CITIBIKE_VEHICLE_TYPE).json()
         return pl.DataFrame(dat['data']['vehicle_types'], schema=["vehicle_type_id", "form_factor", "propulsion_type", "max_range_meters"])
+    
 
 
     def get_station_status(self):
@@ -114,3 +122,18 @@ class DatasetLoader:
         stations = self.get_stations()
         df = stations.join(status, on="station_id", how="inner")
         return df
+
+    def get_mta_alarms(self): 
+        url = "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/camsys%2Fall-alerts"
+        # Make a GET request to the MTA endpoint
+        response = requests.get(url)
+
+        # Check if the request was successful
+        if response.status_code == 200:
+            # Initialize a FeedMessage
+            feed = gtfs_realtime_pb2.FeedMessage()
+            feed.ParseFromString(response.content)
+            
+            return feed.entity
+        else:
+            print(f"Failed to retrieve data: {response.status_code}")

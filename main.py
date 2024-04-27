@@ -2,6 +2,7 @@ import asyncio
 import logging
 import os.path
 import threading
+import pyarrow as pa
 
 import csp
 from csp import ts
@@ -17,6 +18,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from perspective import PerspectiveManager, PerspectiveStarletteHandler
 from perspective import Table as PerspectiveTable
 from starlette.staticfiles import StaticFiles
+
+
 
 def make_perspective_app(manager: PerspectiveManager):
     """Code to create a Perspective webserver. This code is adapted from
@@ -86,8 +89,13 @@ def poll_data(interval: timedelta) -> ts[pl.DataFrame]:
 @csp.node
 def push_data_to_perspective_table(data: ts[pl.DataFrame], table: PerspectiveTable):
     if csp.ticked(data):
-        test = data.to_pandas()
-        table.update(test)
+        # table_data = data.to_arrow()
+        # stream = pa.BufferOutputStream()
+        # writer = pa.RecordBatchStreamWriter(stream, table_data.schema)
+        # writer.write_table(table_data)
+        # writer.close()
+        # table.update(stream.getvalue().to_pybytes())
+        table.update(data.to_pandas().to_dict(orient="records"))
         
 @csp.node
 def process_data(df: ts[pl.DataFrame]) -> ts[pl.DataFrame]:
@@ -96,7 +104,7 @@ def process_data(df: ts[pl.DataFrame]) -> ts[pl.DataFrame]:
             graph = Graph(top_k=3)  
             graph._fill_nodes(df)  
             graph.set_top_k_distances()
-            graph.rebalance_stations(25, 45)
+            graph.rebalance_stations(25, 30)
 
             modified_df = df.clone()
 
@@ -113,8 +121,8 @@ def main_graph(table: PerspectiveTable, mod_table: PerspectiveTable, interval: t
     # data.vstack(modified_df)
     push_data_to_perspective_table(data, table)
     push_data_to_perspective_table(modified_df, mod_table)
-    csp.print("data", data)
-    csp.print("graph", modified_df)
+    # csp.print("data", data)
+    # csp.print("graph", modified_df)
 
 def run_app(manager: PerspectiveManager):
     """Connect to csp to perspective and load data
@@ -181,7 +189,6 @@ def main():
     run_app(perspective_manager)
     # logging.critical("Listening on http://localhost:8080")
     uvicorn.run(app, host="0.0.0.0", port=8080)
-
 
 
 if __name__ == '__main__':
