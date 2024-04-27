@@ -9,10 +9,10 @@ class TestDatasetLoader(unittest.TestCase):
         self.loader = DatasetLoader("test_data/Iris.csv")
 
     @patch("polars.scan_csv")
-    def test_load_data_success(self, mock_scan_csv):
+    def test_load_data_csv_success(self, mock_scan_csv):
         mock_stream = MagicMock()
         mock_scan_csv.return_value = mock_stream
-        self.loader.load_data(batch_size=500)
+        self.loader.load_data_csv(batch_size=500)
         mock_scan_csv.assert_called_with("test_data/Iris.csv", n_rows=500)
         self.assertIsNotNone(self.loader.stream)
         self.assertIs(self.loader.stream, mock_stream)
@@ -23,16 +23,16 @@ class TestDatasetLoader(unittest.TestCase):
         mock_stream.collect.return_value = pl.DataFrame({"column1": [1, 2], "column2": [3, 4]})
         mock_scan_csv.return_value = mock_stream
 
-        self.loader.load_data(batch_size=500)
+        self.loader.load_data_csv(batch_size=500)
         self.loader.finalize_data()
         self.assertIsNotNone(self.loader.dataframe)
         self.assertIsInstance(self.loader.dataframe, pl.DataFrame)
 
     @patch("polars.scan_csv")
-    def test_load_data_failure(self, mock_scan_csv):
+    def test_load_data_csv_failure(self, mock_scan_csv):
         mock_scan_csv.side_effect = Exception("Failed to initialize data stream")
         with self.assertLogs(level='ERROR') as log:
-            self.loader.load_data()
+            self.loader.load_data_csv()
             self.assertIn("Failed to load data: Failed to initialize data stream", log.output[0])
 
     def test_check_fields(self):

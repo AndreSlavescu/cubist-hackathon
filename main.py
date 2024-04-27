@@ -21,13 +21,13 @@ def poll_data(interval: timedelta) -> ts[pl.DataFrame]:
         return status
 
 @csp.graph
-def main_graph(interval: timedelta = timedelta(seconds=60)):
+def main_graph(interval: timedelta = timedelta(seconds=10)):
     data = poll_data(interval)
     csp.print("data", data)
 
 
 def main():
-    csp.run(main_graph, timedelta(seconds=60), realtime=True)
+    csp.run(main_graph, timedelta(seconds=10), realtime=True)
 
 if __name__ == '__main__':
     main()

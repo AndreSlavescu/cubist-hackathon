@@ -25,7 +25,7 @@ class DatasetLoader:
         self.dataframe = pl.DataFrame()
         self.stream = None
 
-    def load_data(self, batch_size: int = 1024):
+    def load_data_csv(self, batch_size: int = 1024):
         """
         Load data from the file_path using Polars.
         """
@@ -36,12 +36,12 @@ class DatasetLoader:
         except Exception as e:
             self.logger.error(f"Failed to load data: {e}")
 
-    def load_data_json(self, data: str):
+    def load_data_json(self):
         """
         Load data from the file_path using Polars.
         """
         try:
-            self.stream = pl.read_json(data)
+            self.stream = pl.read_json(self.file_path)
             self.logger.info("Data loaded successfully.")
         except Exception as e:
             self.logger.error(f"Failed to load data: {e}")

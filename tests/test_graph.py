@@ -7,7 +7,6 @@ from collections import defaultdict
 
 class TestGraph(unittest.TestCase):
     def setUp(self):
-        self.loader = DatasetLoader("test_data/citibike_data_march_2024.csv")
         mock_data = {
             "data": {
                 "stations": [
@@ -41,7 +40,12 @@ class TestGraph(unittest.TestCase):
 
     def test_initialization(self):
         self.assertIsInstance(self.graph.nodes, defaultdict)
+        self.assertIsInstance(self.graph.top_k_neighbors, defaultdict)
         self.assertEqual(self.graph.k, 3)
+
+    def test_set_top_k_distances(self):
+        self.graph.set_top_k_distances()
+        self.assertEqual(len(self.graph.top_k_neighbors['1']), 3)
 
     def test_get_top_k_neighbors(self):
         self.graph.top_k_neighbors[(40.7486, -73.9864, "Station1")] = ["Station2", "Station3", "Station4"]
@@ -49,6 +53,37 @@ class TestGraph(unittest.TestCase):
         self.assertIn("Station2", neighbors)
         self.assertIn("Station3", neighbors)
         self.assertIn("Station4", neighbors)
+
+    def test_set_top_k_neighbors(self):
+        target_node_id = '1'
+        self.graph.nodes = {
+            '1': (40.7486, -73.9864, "Station1"),
+            '2': (40.7496, -73.9874, "Station2"),
+            '3': (40.7506, -73.9884, "Station3")
+        }
+        self.graph.set_top_k_neighbors(target_node_id)
+        self.graph.set_top_k_neighbors(target_node_id)
+        expected_neighbors = [(0.0019999999999882334, '2'), (0.003999999999990678, '3')]
+
+        self.assertEqual(self.graph.top_k_neighbors[target_node_id], expected_neighbors)
+
+    def test_get_top_k_distances(self):
+        self.graph.nodes = {
+            '1': (40.7486, -73.9864, "Station1"),
+            '2': (40.7496, -73.9874, "Station2"),
+            '3': (40.7506, -73.9884, "Station3")
+        }
+        self.graph.set_top_k_distances()  
+
+        distances = self.graph.get_top_k_distances()
+
+        expected_distances = [
+            [(0.0019999999999882334, '2'), (0.003999999999990678, '3')],
+            [(0.0019999999999882334, '1'), (0.0020000000000024443, '3')],
+            [(0.0020000000000024443, '2'), (0.003999999999990678, '1')]
+        ]
+
+        self.assertEqual(distances, expected_distances)
 
 if __name__ == '__main__':
     unittest.main()
