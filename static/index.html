@@ -43,6 +43,7 @@
   <body>
     <perspective-viewer id="map" theme="Pro Dark"></perspective-viewer>
     <perspective-viewer id="mod_map" theme="Pro Dark"></perspective-viewer>
+    <!-- <perspective-viewer id="alerts_map" theme="Pro Dark"></perspective-viewer> -->
   </body>
   <script type="module">
     import perspective from "https://cdn.jsdelivr.net/npm/@finos/perspective/dist/cdn/perspective.js";
@@ -54,12 +55,29 @@
       const worker = perspective.worker();
       const table = websocket.open_table("data");
       const mod_table = websocket.open_table("mod_data");
+      const alerts_table = websocket.open_table("alerts_table");
       document.getElementById("map").load(table);
       document.getElementById("mod_map").load(mod_table);
+    //   document.getElementById("alerts_map").load(alerts_table);
+    //   document.getElementById("alerts_map").restore({
+    //     plugin: "Datagrid",
+    //     theme: "Pro Dark",
+    //     title: "Map",
+    //     columns: [
+    //       "lon",
+    //       "lat",
+    //       "address",
+    //       null,
+    //       null,
+    //     ]
+    //   });
 
     //   const layout_json = await fetch("layout.json");
     //   const layout = await layout_json.json();
     //   document.getElementById("map").restore(layout);
+
+      
+    
 
       document.getElementById("map").restore({
         plugin: "Map Scatter",
