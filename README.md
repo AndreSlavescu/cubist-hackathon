@@ -8,7 +8,7 @@ For more details on our system's design, see our [design doc](docs/system_design
 
 ```bash
 chmod +x build.sh
-./build
+./build.sh
 ```
 
 ## Run Tests
