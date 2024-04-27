@@ -1,0 +1,10 @@
+{
+    "plugin": "Map Scatter",
+    "plugin_config": {},
+    "settings": true,
+    "theme": "Pro Dark",
+    "split_by": ["is_renting"],
+    "columns": ["lon", "lat", "total_bikes_available", null, null],
+    "filter": [["lon", null, null]],
+    "sort": []
+}

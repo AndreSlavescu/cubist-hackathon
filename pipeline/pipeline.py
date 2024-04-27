@@ -111,6 +111,6 @@ class DatasetLoader:
     def get_station_status(self):
         records = httpx.get(CITIBIKE_STATION_STATUS).json()["data"]["stations"]
         status = pl.DataFrame(records, schema=["station_id", "num_bikes_available", "num_bikes_disabled", "num_docks_available", "num_docks_disabled", "num_ebikes_available", "is_installed", "is_renting", "is_returning", "last_reported"])
-
         stations = self.get_stations()
-        return stations.join(status, on="station_id", how="inner")
+        df = stations.join(status, on="station_id", how="inner")
+        return df

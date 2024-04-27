@@ -1,0 +1,93 @@
+<html>
+  <head>
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@finos/perspective/dist/cdn/perspective.js"
+    ></script>
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@finos/perspective-viewer/dist/cdn/perspective-viewer.js"
+    ></script>
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@finos/perspective-viewer-datagrid/dist/cdn/perspective-viewer-datagrid.js"
+    ></script>
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@finos/perspective-viewer-d3fc/dist/cdn/perspective-viewer-d3fc.js"
+    ></script>
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@finos/perspective-viewer-openlayers/dist/cdn/perspective-viewer-openlayers.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/npm/@finos/perspective-viewer/dist/css/pro.css"
+    />
+    <style>
+      body {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: row;
+      }
+      perspective-viewer {
+        width: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <perspective-viewer id="map" theme="Pro Dark"></perspective-viewer>
+    <perspective-viewer id="grid" theme="Pro Dark"></perspective-viewer>
+  </body>
+  <script type="module">
+    import perspective from "https://cdn.jsdelivr.net/npm/@finos/perspective/dist/cdn/perspective.js";
+
+    
+
+    window.addEventListener("DOMContentLoaded", async function () {
+      const websocket = perspective.websocket("ws://localhost:8080/websocket");
+      const worker = perspective.worker();
+      const table = websocket.open_table("data");
+      document.getElementById("map").load(table);
+      document.getElementById("grid").load(table);
+
+    //   const layout_json = await fetch("layout.json");
+    //   const layout = await layout_json.json();
+    //   document.getElementById("map").restore(layout);
+
+      document.getElementById("map").restore({
+        plugin: "Map Scatter",
+        theme: "Pro Dark",
+        title: "Map",
+        columns: [
+          "lon",
+          "lat",
+          "num_bikes_available",
+          "capacity",
+          null,
+          null,
+        ]
+    
+      });
+      document.getElementById("grid").restore({
+        plugin: "Datagrid",
+        theme: "Pro Dark",
+        title: "Grid",
+        columns: [
+          "name",
+          "last_reported",
+          "capacity",
+          "is_renting",
+          "is_returning",
+          "num_bikes_available",
+        ],
+        sort: [["last_reported", "desc"]],
+      });
+    });
+  </script>
+</html>
