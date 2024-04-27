@@ -26,4 +26,4 @@ pipenv run python -m unittest discover -s tests
 ```bash
 pipenv run python main.py
 ```
-After starting the service, open [local host](http://localhost:8000) to access the web interface.
+After starting the service, open [local host](http://0.0.0.0:8080) to access the web interface.
