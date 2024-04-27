@@ -99,8 +99,11 @@ def process_data(df: ts[pl.DataFrame]) -> ts[pl.DataFrame]:
             graph.rebalance_stations(25, 45)
 
             modified_df = df.clone()
+
+            # This loop iterates over each station in the graph. For each station, it updates the 'capacity' column in the DataFrame 'modified_df'.
+            # It sets the 'capacity' to 'num_bikes' where the 'station_id' matches, otherwise it retains the original 'capacity'.
             for station_id, (num_bikes, _, _, _) in graph.nodes.items():
-                modified_df = modified_df.with_columns(pl.when(pl.col("station_id") == station_id).then(num_bikes).otherwise(pl.col("capacity")).alias("capacity"))
+                modified_df = modified_df.with_columns(pl.when(pl.col("station_id") == station_id).then(num_bikes).otherwise(pl.col("num_bikes_available")).alias("num_bikes_available"))
             return modified_df
 
 @csp.graph        

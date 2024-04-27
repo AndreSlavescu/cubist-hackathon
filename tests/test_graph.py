@@ -9,10 +9,10 @@ from collections import defaultdict
 class TestGraph(unittest.TestCase):
     def setUp(self):
         data = [
-            {"station_id": "1", "capacity": 15, "lat": 40.7486, "lon": -73.9864, "name": "Station1"},
-            {"station_id": "2", "capacity": 25, "lat": 40.7496, "lon": -73.9874, "name": "Station2"},
-            {"station_id": "3", "capacity": 35, "lat": 40.7506, "lon": -73.9884, "name": "Station3"},
-            {"station_id": "4", "capacity": 45, "lat": 40.7516, "lon": -73.9894, "name": "Station4"}
+            {"station_id": "1", "num_bikes_available": 15, "lat": 40.7486, "lon": -73.9864, "name": "Station1"},
+            {"station_id": "2", "num_bikes_available": 25, "lat": 40.7496, "lon": -73.9874, "name": "Station2"},
+            {"station_id": "3", "num_bikes_available": 35, "lat": 40.7506, "lon": -73.9884, "name": "Station3"},
+            {"station_id": "4", "num_bikes_available": 45, "lat": 40.7516, "lon": -73.9894, "name": "Station4"}
         ]
         df = pl.DataFrame(data)
         self.graph = Graph(top_k=3)

@@ -26,7 +26,7 @@ class Graph:
         try: 
             for row in dataframe.to_dicts():
                 station_id = row['station_id']
-                num_bikes = row['capacity']
+                num_bikes = row['num_bikes_available']
                 lat = row['lat']
                 lon = row['lon']
                 name = row['name']
