@@ -1,5 +1,9 @@
 # Cubist Hackathon 
 
+## Team
+
+Andre Slavescu, Matthew Gong, Tanzir Hasan, Tri Dao, Yams Gupta
+
 ## Design Motivation
 
 For more details on our system's design, see our [design doc](docs/system_design.md).
